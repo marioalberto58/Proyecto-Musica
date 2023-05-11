@@ -1,0 +1,100 @@
+import glob
+import os
+import partitura as pt
+import numpy as np
+import matplotlib.pyplot as plt
+import os
+os.environ['KMP_DUPLICATE_LIB_OK']='True'
+import IPython.display as ipd
+
+if IN_COLAB:
+    !git clone https://github.com/CPJKU/vienna4x22.git
+    DATASET_DIR = "./vienna4x22"
+    MUSICXML_DIR = os.path.join(DATASET_DIR, 'musicxml')
+    MIDI_DIR = os.path.join(DATASET_DIR, 'midi')
+    MATCH_DIR = os.path.join(DATASET_DIR, 'match')
+else:
+    import sys, os
+    sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.getcwd())), "utils"))
+    from load_data import init_dataset
+    DATASET_DIR = init_dataset()
+    MUSICXML_DIR = os.path.join(DATASET_DIR, 'musicxml')
+    MIDI_DIR = os.path.join(DATASET_DIR, 'midi')
+    MATCH_DIR = os.path.join(DATASET_DIR, 'match')
+    
+path_to_musicxml = pt.EXAMPLE_MUSICXML
+part = pt.load_musicxml(path_to_musicxml)[0] # we access the first (and sole) part of this score by indexing the returned score
+print(part.pretty())
+
+part.notes
+
+a_new_note = pt.score.Note(id='n04', step='A', octave=4, voice=1)
+part.add(a_new_note, start=3, end=15)
+
+part.remove(a_new_note)
+
+part.beat_map(part.notes[0].end.t)
+
+for measure in part.iter_all(pt.score.Measure):
+    print(measure)
+    
+for note in part.iter_all(pt.score.GenericNote, include_subclasses=True, start=0, end=24):
+    print(note)
+    
+# figure out the last measure position, time signature and beat length in divs
+measures = [m for m in part.iter_all(pt.score.Measure)]
+last_measure_number = measures[-1].number
+append_measure_start =  measures[-1].end.t 
+Last_measure_ts = part.time_signature_map(append_measure_start)
+
+Last_measure_ts = part.time_signature_map(append_measure_start)
+one_beat_in_divs_at_the_end = append_measure_start - part.inv_beat_map(part.beat_map(append_measure_start)-1)
+append_measure_end = append_measure_start +  one_beat_in_divs_at_the_end*Last_measure_ts[0]
+
+# add a measure
+a_new_measure = pt.score.Measure(number = last_measure_number+1)
+part.add(a_new_measure, start=append_measure_start, end=append_measure_end)
+# add a note
+a_new_note = pt.score.Note(id='n04', step='A', octave=4, voice=1)
+part.add(a_new_note, start=append_measure_start, end=append_measure_start+one_beat_in_divs_at_the_end)
+
+def addnote(midipitch, part, voice, start, end, idx):
+    """
+    adds a single note by midipitch to a part
+    """
+    step, alter, octave = pt.utils.music.midi_pitch_to_pitch_spelling(midipitch)
+
+    part.add(pt.score.Note(id='n{}'.format(idx), step=step, 
+                        octave=int(octave), alter=alter, voice=voice, staff=int((voice-1)%2+1)),
+                        start=start, end=end)
+
+l = 100
+p = pt.score.Part('cat_on_keyboard', 'Cat on Keyboard', quarter_duration=8)
+dur = np.random.randint(1,20, size=(4,l))
+ons = np.cumsum(np.concatenate((np.zeros((4,1)),dur), axis=1), axis = 1)
+pitch = np.row_stack((np.random.randint(70,80, size=(1,l)),
+                      np.random.randint(50,60, size=(1,l)),
+                      np.random.randint(60,70, size=(1,l)),
+                      np.random.randint(40,50, size=(1,l))
+                     ))
+
+for k in range(l):
+    for j in range(4):
+        addnote(pitch[j,k], p, j+1, ons[j,k], ons[j,k]+dur[j,k], "v"+str(j)+"n"+str(k))
+# sanitize the part
+p.add(pt.score.TimeSignature(4, 4), start=0)
+p.add(pt.score.Clef(1, "G", line = 3, octave_change=0),start=0)
+p.add(pt.score.Clef(2, "F", line = 4, octave_change=0),start=0)
+pt.score.add_measures(p)
+pt.score.tie_notes(p)
+# pt.save_score_midi(p, "CatPerformance.mid", part_voice_assign_mode=2)
+# pt.save_musicxml(p, "CatScore.musicxml")
+pr = pt.utils.compute_pianoroll(p)
+fig, ax = plt.subplots(1, figsize=(8, 2))
+ax.imshow(pr.toarray()[35:85,:500], origin="lower", cmap='gray', interpolation='nearest', aspect='auto')
+plt.show()
+
+SAMPLE_RATE = 11025
+
+audio_p = pt.utils.synth.synthesize(note_info=p, samplerate=SAMPLE_RATE, harmonic_dist=10, bpm=180)
+ipd.display(ipd.Audio(data=audio_p, rate=SAMPLE_RATE, normalize=False))
