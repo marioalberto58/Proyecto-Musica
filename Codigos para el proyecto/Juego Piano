@@ -1,0 +1,176 @@
+import winsound
+import tkinter as tk
+
+root = tk.Tk()
+root.configure(background="#171617")
+root.resizable(width=False, height=False)
+
+# Obtener el ancho y alto de la pantalla
+ancho_pantalla = root.winfo_screenwidth()
+alto_pantalla = root.winfo_screenheight()
+
+# Calcular las coordenadas x e y para centrar la ventana un poco más arriba
+x = int((ancho_pantalla - 1366) / 2)  # El ancho de la ventana es 1366
+y = int((alto_pantalla - 768) / 2) - 50  # El alto de la ventana es 768, ajuste de -50 píxeles hacia arriba
+
+# Establecer la posición de la ventana
+root.geometry(f"1366x768+{x}+{y}")
+
+
+ancho_tecla_blanca = 30
+alto_tecla_blanca = 80
+ancho_tecla_negra = 15
+alto_tecla_negra = 60
+
+nivel = 1
+secuencia_nivel_uno = [261.63, 293.665, 329.628]
+secuencia_nivel_dos = [261.63, 329.628, 391.995]
+secuencia_nivel_tres = [261.63, 293.665, 329.628, 349.228, 391.995, 440.000, 493.883, 523.251]
+
+# Función para reproducir el sonido de la tecla
+def reproducir_sonido(frecuencia):
+    duracion = 800
+    winsound.Beep(int(frecuencia), duracion)
+
+# Función para capturar la frecuencia y verificar la secuencia según el nivel
+def capturar_frecuencia(frecuencia):
+    if nivel == 1:
+        if frecuencia == secuencia_nivel_uno[len(frecuencia_actual)]:
+            reproducir_sonido(frecuencia)
+            frecuencia_actual.append(frecuencia)
+            if len(frecuencia_actual) == len(secuencia_nivel_uno):
+                habilitar_siguiente_nivel()
+        else:
+            reiniciar_secuencia()
+    elif nivel == 2:
+        if frecuencia == secuencia_nivel_dos[len(frecuencia_actual)]:
+            reproducir_sonido(frecuencia)
+            frecuencia_actual.append(frecuencia)
+            if len(frecuencia_actual) == len(secuencia_nivel_dos):
+                habilitar_siguiente_nivel()
+        else:
+            reiniciar_secuencia()
+    elif nivel == 3:
+        if frecuencia == secuencia_nivel_tres[len(frecuencia_actual)]:
+            reproducir_sonido(frecuencia)
+            frecuencia_actual.append(frecuencia)
+            if len(frecuencia_actual) == len(secuencia_nivel_tres):
+                habilitar_siguiente_nivel()
+        else:
+            reiniciar_secuencia()
+
+# Función para reproducir la secuencia del nivel actual
+def reproducir_secuencia():
+    if nivel == 1:
+        for frecuencia in secuencia_nivel_uno:
+            reproducir_sonido(frecuencia)
+    elif nivel == 2:
+        for frecuencia in secuencia_nivel_dos:
+            reproducir_sonido(frecuencia)
+    elif nivel == 3:
+        for frecuencia in secuencia_nivel_tres:
+            reproducir_sonido(frecuencia)
+
+# Función para reiniciar la secuencia
+def reiniciar_secuencia():
+    global frecuencia_actual
+    frecuencia_actual = []
+    reproducir_secuencia()
+
+# Función para habilitar el botón de siguiente nivel
+def habilitar_siguiente_nivel():
+    boton_siguiente_nivel.config(state=tk.NORMAL)
+
+# Función para retroceder al nivel anterior
+def volver_nivel_anterior():
+    global nivel, frecuencia_actual
+    nivel -= 1
+    frecuencia_actual = []
+    boton_siguiente_nivel.config(state=tk.NORMAL)
+    mostrar_texto_nivel()
+
+# Función para avanzar al siguiente nivel
+def empezar_siguiente_nivel():
+    global nivel, frecuencia_actual
+    nivel += 1
+    frecuencia_actual = []
+    boton_siguiente_nivel.config(state=tk.DISABLED)
+    mostrar_texto_nivel()
+
+# Función para mostrar el nivel actual
+def mostrar_texto_nivel():
+    nivel_label.config(text="Nivel: {}".format(nivel))
+
+# Creación de las teclas blancas
+tecla_DO = tk.Button(root, width=ancho_tecla_blanca, height=alto_tecla_blanca, bg='#FF600D')
+tecla_DO.place(relx=0, anchor='w')
+tecla_DO.bind('<Button-1>', lambda event: capturar_frecuencia(261.63))
+
+tecla_RE = tk.Button(root, width=ancho_tecla_blanca, height=alto_tecla_blanca, bg='#EB3728')
+tecla_RE.place(relx=1/8, anchor='w')
+tecla_RE.bind('<Button-1>', lambda event: capturar_frecuencia(293.665))
+
+tecla_MI = tk.Button(root, width=ancho_tecla_blanca, height=alto_tecla_blanca, bg='#FFE722')
+tecla_MI.place(relx=2/8, anchor='w')
+tecla_MI.bind('<Button-1>', lambda event: capturar_frecuencia(329.628))
+
+tecla_FA = tk.Button(root, width=ancho_tecla_blanca, height=alto_tecla_blanca, bg='#B0FF52')
+tecla_FA.place(relx=3/8, anchor='w')
+tecla_FA.bind('<Button-1>', lambda event: capturar_frecuencia(349.228))
+
+tecla_SOL = tk.Button(root, width=ancho_tecla_blanca, height=alto_tecla_blanca, bg='#5FFA2C')
+tecla_SOL.place(relx=4/8, anchor='w')
+tecla_SOL.bind('<Button-1>', lambda event: capturar_frecuencia(391.995))
+
+tecla_LA = tk.Button(root, width=ancho_tecla_blanca, height=alto_tecla_blanca, bg='turquoise')
+tecla_LA.place(relx=5/8, anchor='w')
+tecla_LA.bind('<Button-1>', lambda event: capturar_frecuencia(440.000))
+
+tecla_SI = tk.Button(root, width=ancho_tecla_blanca, height=alto_tecla_blanca, bg='#259AD7')
+tecla_SI.place(relx=6/8, anchor='w')
+tecla_SI.bind('<Button-1>', lambda event: capturar_frecuencia(493.883))
+
+tecla_DO2 = tk.Button(root, width=ancho_tecla_blanca, height=alto_tecla_blanca, bg='#C46FFF')
+tecla_DO2.place(relx=7/8, anchor='w')
+tecla_DO2.bind('<Button-1>', lambda event: capturar_frecuencia(523.251))
+
+# Creación de las teclas negras
+tecla_REb = tk.Button(root, width=ancho_tecla_negra, height=alto_tecla_negra, bg='#FFB499')
+tecla_REb.place(relx=1/8, rely=0.4, anchor='s')
+tecla_REb.bind('<Button-1>', lambda event: capturar_frecuencia(277.183))
+
+tecla_Mib = tk.Button(root, width=ancho_tecla_negra, height=alto_tecla_negra, bg='#F6D645')
+tecla_Mib.place(relx=2/8, rely=0.4, anchor='s')
+tecla_Mib.bind('<Button-1>', lambda event: capturar_frecuencia(311.127))
+
+tecla_Solb = tk.Button(root, width=ancho_tecla_negra, height=alto_tecla_negra, bg='#78FF86')
+tecla_Solb.place(relx=4/8, rely=0.4, anchor='s')
+tecla_Solb.bind('<Button-1>', lambda event: capturar_frecuencia(369.994))
+
+tecla_LAb = tk.Button(root, width=ancho_tecla_negra, height=alto_tecla_negra, bg='#FBFF72')
+tecla_LAb.place(relx=5/8, rely=0.4, anchor='s')
+tecla_LAb.bind('<Button-1>', lambda event: capturar_frecuencia(415.305))
+
+tecla_SIb = tk.Button(root, width=ancho_tecla_negra, height=alto_tecla_negra, bg='#FFBA5C')
+tecla_SIb.place(relx=6/8, rely=0.4, anchor='s')
+tecla_SIb.bind('<Button-1>', lambda event: capturar_frecuencia(466.164))
+
+# Creación de los botones de control
+frecuencia_actual = []
+
+boton_reproducir_secuencia = tk.Button(root, text="Reproducir Secuencia", width=20, height=2)
+boton_reproducir_secuencia.place(relx=0.2, rely=0.9)
+boton_reproducir_secuencia.config(command=reproducir_secuencia)
+
+boton_siguiente_nivel = tk.Button(root, text="Siguiente Nivel", width=20, height=2, state=tk.DISABLED)
+boton_siguiente_nivel.place(relx=0.4, rely=0.9)
+boton_siguiente_nivel.config(command=empezar_siguiente_nivel)
+
+boton_volver_nivel_anterior = tk.Button(root, text="Volver al Nivel Anterior", width=20, height=2)
+boton_volver_nivel_anterior.place(relx=0.6, rely=0.9)
+boton_volver_nivel_anterior.config(command=volver_nivel_anterior)
+
+nivel_label = tk.Label(root, text="Nivel: {}".format(nivel))
+nivel_label.place(relx=0.1, rely=0.1)
+
+root.mainloop()
