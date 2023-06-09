@@ -1,0 +1,317 @@
+from tkinter import Tk, Button, Label, Frame
+import winsound
+
+# Función para reproducir el sonido de la tecla
+def reproducir_sonido(frecuencia):
+    duracion = 800
+    winsound.Beep(int(frecuencia), duracion)
+
+def mostrar_piano():
+    frame_introduccion.pack_forget()
+    frame_piano.pack()
+
+def mostrar_introduccion_teoria():
+    frame_introduccion.pack_forget()
+    frame_introduccion_teoria_musical.pack()
+
+def retroceder(): #f1re
+    frame_introduccion_teoria_musical.pack_forget()
+    frame_introduccion.pack()
+
+def avanzar(): #f1av
+    frame_introduccion_teoria_musical.pack_forget()
+    frame_notas_musicales.pack()
+    
+    
+    
+def retroceder2(): #f2re
+    frame_notas_musicales.pack_forget()
+    frame_introduccion_teoria_musical.pack()
+
+def avanzar2(): #f2av
+    frame_notas_musicales.pack_forget()
+    frame_intervalos.pack()    
+    
+    
+    
+def retroceder3(): #f3re
+    frame_intervalos.pack_forget()
+    frame_notas_musicales.pack()
+
+def avanzar3(): #f3av
+    frame_intervalos.pack_forget()
+    frame_acordes_mayores.pack()
+    
+    
+    
+def retroceder4(): #f4re
+    frame_acordes_mayores.pack_forget()
+    frame_intervalos.pack()
+
+def avanzar4(): #f4av
+    frame_acordes_mayores.pack_forget()
+    frame_escalas_mayores.pack()
+
+
+
+def retroceder5(): #f5re
+    frame_escalas_mayores.pack_forget()
+    frame_acordes_mayores.pack()
+    
+    
+def retroceder6(): #f6re piano
+    frame_piano.pack_forget()
+    frame_introduccion.pack()
+    
+    
+def reproducir_sonido(frecuencia):
+    duracion = 800
+    winsound.Beep(int(frecuencia), duracion)
+    
+    
+# Crear la ventana principal
+ventana = Tk()
+ventana.title("POMA")
+ventana.configure(bg="#000000")
+ventana.resizable(width=False, height=False)
+
+# Obtener el ancho y alto de la pantalla
+ancho_pantalla = ventana.winfo_screenwidth()
+alto_pantalla = ventana.winfo_screenheight()
+
+# Calcular las coordenadas x e y para centrar la ventana un poco más arriba
+x = int((ancho_pantalla - 1366) / 2)  # El ancho de la ventana es 1366
+y = int((alto_pantalla - 768) / 2) - 50  # El alto de la ventana es 768, ajuste de -50 píxeles hacia arriba
+
+# Establecer la posición de la ventana
+ventana.geometry(f"1366x768+{x}+{y}")
+
+# Frame de introducción
+frame_introduccion = Frame(ventana, bg="#000000")
+frame_introduccion.pack()
+
+# Etiqueta de bienvenida
+etiqueta_bienvenida = Label(frame_introduccion, text="BIENVENIDO A POMA", font=("Arial", 80), bg="#FFA500", fg="#FFFFFF")
+etiqueta_bienvenida.pack(pady=100)
+
+# Botones de teoría y práctica
+boton_teoria = Button(frame_introduccion, text="TEORIA", font=("Arial", 40), bg="#FFA500", fg="#FFFFFF", command=mostrar_introduccion_teoria)
+boton_teoria.pack(pady=20)
+
+boton_practica = Button(frame_introduccion, text="PRACTICA", font=("Arial", 40), bg="#FFA500", fg="#FFFFFF", command=mostrar_piano)
+boton_practica.pack(pady=20)
+
+# Frame de introducción a la teoría musical
+frame_introduccion_teoria_musical = Frame(ventana, bg="#000000")
+
+#Frame de notas musicales
+frame_notas_musicales = Frame(ventana, bg="#000000")
+
+#Frame de intervalos
+frame_intervalos = Frame(ventana, bg="#000000")
+
+#Frame de acordes mayores
+frame_acordes_mayores = Frame(ventana, bg="#000000")
+
+#Frame de escalas mayores
+frame_escalas_mayores = Frame(ventana, bg="#000000")
+
+# Frame del piano
+frame_piano = Frame(ventana, bg="#000000")
+
+
+texto_explicado_introduccion_teoria_musical = """
+La teoría musical es un campo de estudio que nos ayuda a comprender
+los elementos esenciales de la música y cómo se organizan. A través
+de la teoría musical, podemos explorar las notas, los intervalos,
+los acordes y las escalas, y entender cómo se combinan para crear
+obras musicales cautivadoras.
+
+La música es un lenguaje universal que ha existido a lo largo de la
+historia y en todas las culturas. Es una forma de expresión artística
+que utiliza el sonido y el ritmo para transmitir emociones, contar
+historias y conectar con las personas a nivel profundo.
+"""
+
+texto_explicado_notas_musicales = """
+Las notas musicales son los elementos fundamentales de la música.
+Representan 12 sonidos distintos. Si bien existen 7 notas principales
+(Do, Re, Mi, Fa, Sol, La, Si). Existen notas entre algunas de ellas.
+Como lo es en Do-Re, Re-Mi, Fa-Sol, Sol-La, La-Si. Para representarlas
+a ellas podemos usar el #(sostenido), que referirnos a una nota que existe
+entre otras dos. Por ejemplo: Para referirnos a la nota que se encuentra
+entre Do y Re, podemos usar la notación Do#.
+
+Cabe aclarar que existen otras formas para referirnos a la misma nota como
+el b (bemol). Por ejemplo para referirnos a la misma nota del ejemplo
+anterior podemos usar la notación Reb.
+"""
+
+texto_explicado_intervalos = """
+Los intervalos son la distancia entre dos notas musicales. Se miden en
+términos de tonos y semitonos. Un tono se compone de dos semitonos.
+
+Un semitono es la distancia mínima que existe entre dos notas. Un ejemplo
+de intervalo de un semitono es el que existe entre Mi y Fa, mientras que
+un intervalo de un tono o dos semitonos es el que existe entre Do y Re.
+
+Existen dos tipos de intervalos, consonantes y disonantes. Los intervalos
+consonantes suelen sonar mas armónicos y agradables, mientras que los
+intervalos disonantes suelen sonar menos estables y con una sonoridad mas tensa.
+"""
+
+texto_explicado_acordes_mayores = """
+Un acorde es un conjunto de tres o mas notas que se tocan simultáneamente.
+Se construyen a partir de intervalos y siguiendo algunas reglas.
+
+Los acordes mayores tienen fundamental, tercera mayor y quinta justa.
+Fundamental.- Nota que da nombre al acorde
+Tercera mayor.- Se encuentra a dos tonos de distancia del fundamental.
+Quinta justa.- Se encuentra a 7 semitonos de distancia del fundamental.
+
+Ejemplo con el acorde de Do: (Do, Mi, Sol)
+Fundamental = Do
+Tercera Mayor = Mi
+Quinta Justa = Sol
+"""
+
+texto_explicado_escalas_mayores = """
+Las escalas son secuencias de notas organizadas en patrones específicos.
+Ayudan a crear melodías y establecer la tonalidad de una pieza musical.
+Para ayudar a la notación de una escala asignaremos “T” a tono y “S” a
+semitono.
+
+Una escala mayor se forma por T-T-S-T-T-T-S. La escala se forma a partir
+de una nota que elijamos. Por ejemplo la escala de Do Mayor, la mas simple
+pero fundamental: Do, Re, Mi, Fa, Sol, La, Si, Do.
+"""
+
+#titulo y contenido del frame de introduccion musical
+titulo_introduccion_teoria_musical = Label(frame_introduccion_teoria_musical, text="Introducción a la Teoría Musical", font=("Arial", 60), bg="#FFA500", fg="#FFFFFF")
+titulo_introduccion_teoria_musical.pack(pady=20)
+
+texto_introduccion_teoria_musical = Label(frame_introduccion_teoria_musical, text=texto_explicado_introduccion_teoria_musical, font=("Arial", 20), bg="#000000", fg="#FFFFFF", justify="center")
+texto_introduccion_teoria_musical.pack(padx=50, pady=30)
+
+#titulo y contenido del frame de notas musicales
+titulo_notas_musicales = Label(frame_notas_musicales, text="Notas Musicales", font=("Arial", 60), bg="#FFA500", fg="#FFFFFF")
+titulo_notas_musicales.pack(pady=20)
+
+texto_notas_musicales = Label(frame_notas_musicales, text=texto_explicado_notas_musicales, font=("Arial", 20), bg="#000000", fg="#FFFFFF", justify="center")
+texto_notas_musicales.pack(padx=50, pady=30)
+
+#titulo y contenido del frame de intervalos
+titulo_intervalos = Label(frame_intervalos, text="Intervalos", font=("Arial", 60), bg="#FFA500", fg="#FFFFFF")
+titulo_intervalos.pack(pady=20)
+
+texto_intervalos = Label(frame_intervalos, text=texto_explicado_intervalos, font=("Arial", 20), bg="#000000", fg="#FFFFFF", justify="center")
+texto_intervalos.pack(padx=50, pady=30)
+
+#titulo y contenido del frame de acordes mayores
+titulo_acordes_mayores = Label(frame_acordes_mayores, text="Acordes Mayores", font=("Arial", 60), bg="#FFA500", fg="#FFFFFF")
+titulo_acordes_mayores.pack(pady=20)
+
+texto_acordes_mayores = Label(frame_acordes_mayores, text=texto_explicado_acordes_mayores, font=("Arial", 20), bg="#000000", fg="#FFFFFF", justify="center")
+texto_acordes_mayores.pack(padx=50, pady=30)
+
+#titulo y contenido del frame de escalas mayores
+titulo_escalas_mayores = Label(frame_escalas_mayores, text="Escalas Mayores", font=("Arial", 60), bg="#FFA500", fg="#FFFFFF")
+titulo_escalas_mayores.pack(pady=20)
+
+texto_escalas_mayores = Label(frame_escalas_mayores, text=texto_explicado_escalas_mayores, font=("Arial", 20), bg="#000000", fg="#FFFFFF", justify="center")
+texto_escalas_mayores.pack(padx=50, pady=30)
+
+
+
+# Botones de avanzar y retroceder de inicio a introduccion musical
+boton_retroceder = Button(frame_introduccion_teoria_musical, text="Retroceder", font=("Arial", 20), bg="#FFA500", fg="#FFFFFF", command=retroceder)
+boton_retroceder.pack(side="left", padx=10, pady=20)
+
+boton_avanzar = Button(frame_introduccion_teoria_musical, text="Avanzar", font=("Arial", 20), bg="#FFA500", fg="#FFFFFF", command=avanzar)
+boton_avanzar.pack(side="right", padx=10, pady=20)
+
+# Botones de avanzar y retroceder de introduccion musical a notas musicales
+boton_retroceder2 = Button(frame_notas_musicales, text="Retroceder", font=("Arial", 20), bg="#FFA500", fg="#FFFFFF", command=retroceder2)
+boton_retroceder2.pack(side="left", padx=10, pady=20)
+
+boton_avanzar2 = Button(frame_notas_musicales, text="Avanzar", font=("Arial", 20), bg="#FFA500", fg="#FFFFFF", command=avanzar2)
+boton_avanzar2.pack(side="right", padx=10, pady=20)
+
+# Botones de avanzar y retroceder de notas musicales a intervalos
+boton_retroceder3 = Button(frame_intervalos, text="Retroceder", font=("Arial", 20), bg="#FFA500", fg="#FFFFFF", command=retroceder3)
+boton_retroceder3.pack(side="left", padx=10, pady=20)
+
+boton_avanzar3 = Button(frame_intervalos, text="Avanzar", font=("Arial", 20), bg="#FFA500", fg="#FFFFFF", command=avanzar3)
+boton_avanzar3.pack(side="right", padx=10, pady=20)
+
+# Botones de avanzar y retroceder de intervalos a acordes mayores
+boton_retroceder4 = Button(frame_acordes_mayores, text="Retroceder", font=("Arial", 20), bg="#FFA500", fg="#FFFFFF", command=retroceder4)
+boton_retroceder4.pack(side="left", padx=10, pady=20)
+
+boton_avanzar4 = Button(frame_acordes_mayores, text="Avanzar", font=("Arial", 20), bg="#FFA500", fg="#FFFFFF", command=avanzar4)
+boton_avanzar4.pack(side="right", padx=10, pady=20)
+
+# Botones de avanzar y retroceder de acordes mayores a escalas mayores
+boton_retroceder5 = Button(frame_escalas_mayores, text="Retroceder", font=("Arial", 20), bg="#FFA500", fg="#FFFFFF", command=retroceder5)
+boton_retroceder5.pack(side="left", padx=10, pady=20)
+
+# Botones de avanzar y retroceder del piano
+boton_retroceder6 = Button(frame_piano, text="Retroceder", font=("Arial", 20), bg="#FFA500", fg="#FFFFFF", command=retroceder6)
+boton_retroceder6.pack(side="bottom", padx=10, pady=20)
+
+
+#botones/teclas del frame del piano
+tecla_DO = Button(frame_piano, width=15, height=30, bg='white')
+tecla_DO.pack(side="left")
+tecla_DO.bind('<Button-1>', lambda event: reproducir_sonido(261.63))
+
+tecla_REb = Button(frame_piano, width=10, height=30, bg='black')
+tecla_REb.pack(side="left")
+tecla_REb.bind('<Button-1>', lambda event: reproducir_sonido(277.183))
+
+tecla_RE = Button(frame_piano, width=15, height=30, bg='white')
+tecla_RE.pack(side="left")
+tecla_RE.bind('<Button-1>', lambda event: reproducir_sonido(293.665))
+
+tecla_Mib = Button(frame_piano, width=10, height=30, bg='black')
+tecla_Mib.pack(side="left")
+tecla_Mib.bind('<Button-1>', lambda event: reproducir_sonido(311.127))
+
+tecla_MI = Button(frame_piano, width=15, height=30, bg='white')
+tecla_MI.pack(side="left")
+tecla_MI.bind('<Button-1>', lambda event: reproducir_sonido(329.628))
+
+tecla_FA = Button(frame_piano, width=15, height=30, bg='white')
+tecla_FA.pack(side="left")
+tecla_FA.bind('<Button-1>', lambda event: reproducir_sonido(349.228))
+
+tecla_Solb = Button(frame_piano, width=10, height=30, bg='black')
+tecla_Solb.pack(side="left")
+tecla_Solb.bind('<Button-1>', lambda event: reproducir_sonido(369.994))
+
+tecla_SOL = Button(frame_piano, width=15, height=30, bg='white')
+tecla_SOL.pack(side="left")
+tecla_SOL.bind('<Button-1>', lambda event: reproducir_sonido(391.995))
+
+tecla_LAb = Button(frame_piano, width=10, height=30, bg='black')
+tecla_LAb.pack(side="left")
+tecla_LAb.bind('<Button-1>', lambda event: reproducir_sonido(415.305))
+
+tecla_LA = Button(frame_piano, width=15, height=30, bg='white')
+tecla_LA.pack(side="left")
+tecla_LA.bind('<Button-1>', lambda event: reproducir_sonido(440.000))
+
+tecla_SIb = Button(frame_piano, width=10, height=30, bg='black')
+tecla_SIb.pack(side="left")
+tecla_SIb.bind('<Button-1>', lambda event: reproducir_sonido(466.164))
+
+tecla_SI = Button(frame_piano, width=15, height=30, bg='white')
+tecla_SI.pack(side="left")
+tecla_SI.bind('<Button-1>', lambda event: reproducir_sonido(493.883))
+
+tecla_DO2 = Button(frame_piano, width=15, height=30, bg='white')
+tecla_DO2.pack(side="left")
+tecla_DO2.bind('<Button-1>', lambda event: reproducir_sonido(523.251))
+
+# Ejecutar la aplicación
+ventana.mainloop()
